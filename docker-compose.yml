@@ -1,0 +1,20 @@
+services:
+  workplace:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      WORKPLACE_DATA_DIR: /app/data
+      WORKER_COUNT: "4"
+    volumes:
+      - workplace-data:/app/data
+    restart: unless-stopped
+    # Optional hardening for untrusted workloads:
+    # deploy:
+    #   resources:
+    #     limits: {cpus: "2", memory: 2G}
+
+volumes:
+  workplace-data:

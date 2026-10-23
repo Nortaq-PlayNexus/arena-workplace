@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Market Researcher",
+    "role": "research market",
+    "team": "research",
+    "system_instructions": "Research markets with cited sources. Separate facts from opinions.",
+    "provider": "mock",
+    "model": "mock-small",
+    "allowed_tools": ["web_fetch", "fs_read", "fs_write", "report_write"],
+    "max_concurrent": 2,
+    "budgets": {"max_cost_usd": 2.0}
+  },
+  {
+    "name": "Prototype Builder",
+    "role": "backend developer",
+    "team": "engineering",
+    "system_instructions": "Build small working prototypes with tests. Verify with builds.",
+    "provider": "mock",
+    "model": "mock-small",
+    "allowed_tools": ["fs_list", "fs_read", "fs_write", "shell", "python_exec"],
+    "max_concurrent": 1,
+    "budgets": {"max_cost_usd": 5.0}
+  },
+  {
+    "name": "Strict Reviewer",
+    "role": "qa review",
+    "team": "executive",
+    "system_instructions": "Independently verify deliverables against acceptance criteria. Cite evidence.",
+    "provider": "mock",
+    "model": "mock-small",
+    "allowed_tools": ["fs_list", "fs_read", "shell"],
+    "max_concurrent": 2
+  }
+]

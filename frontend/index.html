@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autonomous AI Workplace — Command Centre</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div id="auth-banner" class="banner warn hidden"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">◈</span><span>AI Workplace</span></div>
+    <nav id="nav">
+      <button data-view="command" class="active">⌘ Command</button>
+      <button data-view="agents">🤖 Agents</button>
+      <button data-view="projects">📁 Projects</button>
+      <button data-view="approvals">✋ Approvals <span id="nav-apr" class="pill hidden"></span></button>
+      <button data-view="memory">🧠 Memory</button>
+      <button data-view="providers">🔌 Providers</button>
+      <button data-view="logs">📜 Logs</button>
+    </nav>
+    <div class="side-foot">
+      <div id="conn" class="conn">● connecting…</div>
+      <div id="mode-line" class="muted small"></div>
+      <button id="token-btn" class="ghost small">Set API token</button>
+    </div>
+  </aside>
+  <main id="main">
+    <section id="view-command" class="view">
+      <h1>Command Centre</h1>
+      <div id="stats" class="stat-grid"></div>
+      <div class="panel">
+        <h2>Universal objective</h2>
+        <p class="muted">Describe the outcome. The orchestrator builds a plan, assembles a team, and executes.</p>
+        <div class="obj-row">
+          <select id="obj-project"></select>
+          <input id="obj-text" placeholder="e.g. Research this business opportunity, build a prototype, test it, and prepare a launch plan.">
+          <button id="obj-run" class="primary">Orchestrate</button>
+        </div>
+        <div id="obj-result" class="muted small"></div>
+      </div>
+      <div class="cols">
+        <div class="panel">
+          <h2>Live agent activity <span class="muted small">(real backend state)</span></h2>
+          <div id="live-agents" class="live-list"></div>
+        </div>
+        <div class="panel">
+          <h2>Recent events</h2>
+          <div id="events" class="event-list"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Workflow graph <select id="graph-project" class="inline"></select></h2>
+        <div id="graph" class="graph"></div>
+      </div>
+    </section>
+    <section id="view-agents" class="view hidden">
+      <h1>Agent Factory</h1>
+      <div class="cols">
+        <div class="panel">
+          <h2>Create agent</h2>
+          <label>From template <select id="agent-template"><option value="">— custom —</option></select></label>
+          <label>Name <input id="agent-name" placeholder="e.g. Market Researcher"></label>
+          <label>Role / specialty <input id="agent-role" placeholder="e.g. research market"></label>
+          <label>Team <input id="agent-team" placeholder="general" value="general"></label>
+          <label>System instructions <textarea id="agent-instructions" rows="3" placeholder="Behavioural guidelines…"></textarea></label>
+          <div class="row">
+            <label>Provider <select id="agent-provider"></select></label>
+            <label>Model <input id="agent-model" value="mock-small"></label>
+          </div>
+          <label>Allowed tools <span class="muted small">(empty = all non-consequential)</span><input id="agent-tools" placeholder="fs_read, fs_write, web_fetch"></label>
+          <div class="row">
+            <label>Max concurrent <input id="agent-conc" type="number" value="2" min="1" max="10"></label>
+            <label>Max cost USD <input id="agent-budget" type="number" step="0.01" placeholder="no cap"></label>
+          </div>
+          <button id="agent-create" class="primary">Create agent</button>
+          <button id="starter-team" class="ghost">⚡ Create starter team + demo project</button>
+          <div id="agent-msg" class="muted small"></div>
+        </div>
+        <div class="panel">
+          <h2>Registered agents</h2>
+          <div id="agent-list" class="agent-list"></div>
+        </div>
+      </div>
+    </section>
+    <section id="view-projects" class="view hidden">
+      <h1>Projects &amp; Businesses</h1>
+      <div class="panel">
+        <h2>New project / business</h2>
+        <div class="row">
+          <input id="proj-name" placeholder="Name">
+          <select id="proj-type"><option value="project">project</option><option value="business">business</option></select>
+          <input id="proj-obj" placeholder="Objectives">
+          <button id="proj-create" class="primary">Create</button>
+        </div>
+      </div>
+      <div id="project-list" class="proj-grid"></div>
+      <div id="project-detail" class="panel hidden"></div>
+    </section>
+    <section id="view-approvals" class="view hidden">
+      <h1>Approval Inbox</h1>
+      <div id="approval-list" class="apr-list"></div>
+    </section>
+    <section id="view-memory" class="view hidden">
+      <h1>Memory &amp; Knowledge</h1>
+      <div class="panel">
+        <div class="row">
+          <select id="mem-scope"><option value="">all scopes</option><option>global</option><option>user</option><option>agent</option><option>project</option><option>business</option><option>task</option><option>knowledge</option></select>
+          <input id="mem-q" placeholder="search key/value…">
+          <button id="mem-search">Search</button>
+        </div>
+        <div class="row">
+          <input id="mem-key" placeholder="key">
+          <input id="mem-val" placeholder="value">
+          <select id="mem-type"><option>fact</option><option>assumption</option><option>hypothesis</option><option>decision</option><option>lesson</option><option>constraint</option><option>strategy</option><option>question</option></select>
+          <label class="small"><input type="checkbox" id="mem-verified"> verified</label>
+          <button id="mem-add" class="primary">Add</button>
+        </div>
+        <div class="muted small">Scope for new item = selected scope above (default: global). Protected: agents cannot rewrite global instructions.</div>
+      </div>
+      <div id="memory-list" class="mem-list"></div>
+    </section>
+    <section id="view-providers" class="view hidden">
+      <h1>Providers &amp; Models</h1>
+      <p class="muted">Keys come from server environment only — they are never shown here.</p>
+      <div id="provider-list" class="prov-list"></div>
+    </section>
+    <section id="view-logs" class="view hidden">
+      <h1>Logs &amp; Audit</h1>
+      <div class="cols">
+        <div class="panel"><h2>Task events</h2><div id="log-events" class="event-list tall"></div></div>
+        <div class="panel"><h2>Tool audit trail</h2><div id="log-audit" class="event-list tall"></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="modal" class="modal hidden"><div class="modal-body" id="modal-body"></div></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
